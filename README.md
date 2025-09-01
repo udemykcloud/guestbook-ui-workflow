@@ -165,14 +165,8 @@ STEP                      TEMPLATE         PODNAME                              
  ✔ guestbook-build-6ptvl  build-and-push                                                                 
  ├───✔ clean-workspace    clean-workspace  guestbook-build-6ptvl-clean-workspace-2531158719  11s         
  ├───✔ clone              git-clone        guestbook-build-6ptvl-git-clone-208639590         7s          
- └───✔ build              docker-build     guestbook-build-6ptvl-docker-build-2244932224     22s
-ـــ
+ └───✔ build              docker-build     guestbook-build-6ptvl-docker-build-2244932224     22ـــ
 
-ــــ
-
-
-ـــ
-ـــ
 
 Step 7: verify if the workflow works
 
