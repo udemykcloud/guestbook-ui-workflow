@@ -77,8 +77,9 @@ eksctl create cluster -f /Users/ranjiniganeshan/udemy/Argocd/dev-cluster.yaml
 ```
 Step 2: create a pv for workflow
 ```
-kubectl apply -v pv.yaml
-kubectl apply -v pvc.yaml
+kubectl create namespace argo
+kubectl apply -f pv.yaml
+kubectl apply -f pvc.yaml
 ```
 
 Step 3: create a service account, the workflow needs to provision pod and other resources
