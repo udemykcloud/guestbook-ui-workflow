@@ -75,3 +75,34 @@ eksctl create cluster -f /Users/ranjiniganeshan/udemy/Argocd/dev-cluster.yaml
 2025-09-01 15:42:41 [✔]  EKS cluster "dev21-argocd-cluster" in "us-east-1" region is ready
 
 ```
+Step 2: create a pv for workflow
+```
+kubectl apply -v pv.yaml
+kubectl apply -v pvc.yaml
+```
+
+Step 3: create a service account, the workflow needs to provision pod and other resources
+
+```
+kubectl apply -f sa-rbac.yaml
+```
+
+Step 4: create a docker secret
+```
+  kubectl create secret docker-registry dockerhub-secret \
+  --docker-username=udemykcloud534 \
+  --docker-password=Diehard_12 \
+  --docker-email=ranjinimanjunath2025@gmail.com \
+  -n argo
+```
+
+Step 5: create a workflow
+
+```
+argo submit -n argo /Users/ranjiniganeshan/udemy/Argocd/guestbook-ui-app/worflow.yaml  --watch
+```
+Step 6: verify the workflow
+```
+argo logs -n argo @latest --follow  
+
+```
