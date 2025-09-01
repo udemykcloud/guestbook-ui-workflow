@@ -96,11 +96,24 @@ Step 4: create a docker secret
   --docker-email=ranjinimanjunath2025@gmail.com \
   -n argo
 ```
+Step 5: Install argo rollout
+```
+kubectl apply -n argo -f https://github.com/argoproj/argo-workflows/releases/latest/download/install.yaml
+```
 
-Step 5: create a workflow
+Step 6: create a workflow
 
 ```
 argo submit -n argo /Users/ranjiniganeshan/udemy/Argocd/guestbook-ui-app/worflow.yaml  --watch
+```
+
+Step 7: verify if the workflow works
+
+```
+kubectl get pods -n argo
+NAME                                   READY   STATUS    RESTARTS   AGE
+argo-server-55479c8698-pcpjn           1/1     Running   0          64s
+workflow-controller-6cb4558cbf-cdspg   1/1     Running   0          64s
 ```
 Step 6: verify the workflow
 ```
