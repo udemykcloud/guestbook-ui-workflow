@@ -1,6 +1,8 @@
 # guestbook-ui-workflow
 
-Steps 1: ```eksctl create cluster -f /Users/ranjiniganeshan/udemy/Argocd/dev-cluster.yaml```
+Steps 1: 
+```
+eksctl create cluster -f /Users/ranjiniganeshan/udemy/Argocd/dev-cluster.yaml```
 ```
 eksctl create cluster -f /Users/ranjiniganeshan/udemy/Argocd/dev-cluster.yaml
 2025-09-01 15:27:34 [ℹ]  eksctl version 0.212.0
