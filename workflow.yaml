@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: guestbook-build-
+  namespace: argo
+spec:
+  entrypoint: build-and-push
+  serviceAccountName: argo-workflow
+
+  arguments:
+    parameters:
+    - name: repo-url
+      value: "https://github.com/udemykcloud/guestbook-ui-app.git"
+    - name: docker-username
+      value: "udemykcloud534"
+    - name: image-tag
+      value: "v1"
+
+  volumes:
+  - name: repo-pvc
+    persistentVolumeClaim:
+      claimName: workspace-pvc
+  - name: docker-config
+    secret:
+      secretName: dockerhub-secret
+      items:
+        - key: .dockerconfigjson
+          path: config.json
+
+  templates:
+  - name: build-and-push
+    steps:
+    - - name: clean-workspace
+        template: clean-workspace
+    - - name: clone
+        template: git-clone
+    - - name: build
+        template: docker-build
+        arguments:
+          parameters:
+          - name: docker-username
+            value: "{{workflow.parameters.docker-username}}"
+          - name: image-tag
+            value: "{{workflow.parameters.image-tag}}"
+
+  - name: clean-workspace
+    container:
+      image: alpine:latest
+      command: [sh, -c]
+      args:
+        - rm -rf /repo/* || true
+      volumeMounts:
+      - name: repo-pvc
+        mountPath: /repo
+
+  - name: git-clone
+    container:
+      image: alpine/git:latest
+      command: [sh, -c]
+      args:
+        - |
+          echo "Cloning repo..." && \
+          git clone "{{workflow.parameters.repo-url}}" /repo/guestbook-ui-app && \
+          echo "Repo cloned. Listing contents:" && \
+          ls -R /repo/guestbook-ui-app
+      volumeMounts:
+      - name: repo-pvc
+        mountPath: /repo
+
+  - name: docker-build
+    inputs:
+      parameters:
+      - name: docker-username
+      - name: image-tag
+    container:
+      image: gcr.io/kaniko-project/executor:latest
+      args:
+        - "--context=/repo/guestbook-ui-app"
+        - "--dockerfile=/repo/guestbook-ui-app/Dockerfile"
+        - "--destination=docker.io/{{inputs.parameters.docker-username}}/guestbook-ui:{{inputs.parameters.image-tag}}"
+      volumeMounts:
+        - name: repo-pvc
+          mountPath: /repo
+        - name: docker-config
+          mountPath: /kaniko/.docker/config.json
+          subPath: config.json
