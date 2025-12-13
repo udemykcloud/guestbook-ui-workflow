@@ -173,13 +173,11 @@ Step 7: verify if the workflow works
 ```
 kubectl get pods -n argo
 ```
-```
+
 
 NAME                                   READY   STATUS    RESTARTS   AGE
 argo-server-55479c8698-pcpjn           1/1     Running   0          64s
 workflow-controller-6cb4558cbf-cdspg   1/1     Running   0          64s
-```
-
 
 Step 8: verify the workflow
 ```
